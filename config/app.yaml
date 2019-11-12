@@ -11,6 +11,4 @@ db:
   drivername: postgres
 
 
-logging:
-  level:
-    root: info
+loglevel: info

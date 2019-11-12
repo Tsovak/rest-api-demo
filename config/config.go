@@ -12,6 +12,7 @@ type Config struct {
 	ServerAddress string
 	ServerPort    string
 	DbConfig      DbConfig `mapstructure:"db"`
+	LogLevel      string
 }
 
 type DbConfig struct {
