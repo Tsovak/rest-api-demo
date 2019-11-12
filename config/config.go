@@ -1,7 +1,9 @@
 package config
 
 import (
+	log "github.com/go-kit/kit/log/logrus"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"strings"
 )
@@ -12,7 +14,7 @@ type Config struct {
 	ServerAddress string
 	ServerPort    string
 	DbConfig      DbConfig `mapstructure:"db"`
-	LogLevel      string
+	Logger        *logrus.FieldLogger
 }
 
 type DbConfig struct {
@@ -45,7 +47,23 @@ func LoadConfig() (Config, error) {
 		return Config{}, errors.Wrap(err, "Unable to decode into struct")
 	}
 
+	loglevel := viper.GetString("loglevel")
+	getLogger(loglevel)
+
 	return cfg, nil
+}
+
+func getLogger(loglevel string) logrus.FieldLogger {
+	logrusLogger := logrus.New()
+	logrusLogger.SetFormatter(&logrus.JSONFormatter{})
+	level, ok := logrus.ParseLevel(loglevel)
+	if ok != nil {
+		level = logrus.DebugLevel
+	}
+	logrusLogger.SetLevel(level)
+
+	logger := log.NewLogrusLogger(logrusLogger).(logrus.FieldLogger)
+	return logger
 }
 
 // Load config without error
