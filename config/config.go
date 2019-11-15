@@ -18,8 +18,7 @@ type Config struct {
 }
 
 type DbConfig struct {
-	Port       string
-	Host       string
+	Address    string
 	Username   string
 	Password   string
 	Database   string

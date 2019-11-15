@@ -2,8 +2,7 @@ server:
   port: 8080
 
 db:
-  port: 27017
-  host: localhost
+  address: localhost:27017
   username: api
   password: secretpassword
   database: api

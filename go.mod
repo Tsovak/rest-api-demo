@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/go-kit/kit v0.8.0
+	github.com/go-pg/pg/v9 v9.0.1
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/afero v1.2.2 // indirect
@@ -12,6 +13,5 @@ require (
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.2.2
 	golang.org/x/crypto v0.0.0-20191108234033-bd318be0434a // indirect
-	golang.org/x/text v0.3.2 // indirect
 
 )
