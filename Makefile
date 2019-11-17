@@ -17,3 +17,7 @@ mod:
 build:
 	go build -o $(APPNAME) -ldflags "$(LDFLAGS)" *.go
 
+.PHONY: generate
+generate:
+	go generate ./...
+
