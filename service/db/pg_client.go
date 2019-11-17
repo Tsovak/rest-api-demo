@@ -3,13 +3,14 @@ package db
 import (
 	"github.com/sirupsen/logrus"
 	"github.com/tsovak/rest-api-demo/config"
+	"time"
 
 	"github.com/go-pg/pg/v9"
 )
 
 const (
-	ReadTimeout  = 30_000
-	WriteTimeout = 30_000
+	ReadTimeout  = 30 * time.Second
+	WriteTimeout = 30 * time.Second
 	PoolSize     = 10
 	MinIdleConns = 10
 )
