@@ -1,5 +1,5 @@
 export GOPATH ?= $(shell go env GOPATH)
-export GO111MODULE=on
+export GO111MODULE ?= on
 
 APPNAME = app
 LDFLAGS ?=
@@ -21,3 +21,6 @@ build:
 generate:
 	go generate ./...
 
+.PHONY: unit
+unit:
+	go test -v ./... -count 10
