@@ -24,3 +24,7 @@ generate:
 .PHONY: unit
 unit:
 	go test -v ./... -count 10
+
+.PHONY: test
+test: unit
+	go test -v ./... -tags integration -count 1

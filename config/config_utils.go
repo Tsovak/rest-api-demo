@@ -2,10 +2,10 @@ package config
 
 var cfg = Config{
 	DbConfig: DbConfig{
-		Address:  "localhost:5432",
-		Username: "test",
-		Password: "password",
-		//Database:   "test",
+		Address:  "localhost",
+		Username: "postgres",
+		Password: "secret",
+		//Database:   "test_db",
 		Sslmode:    "disable",
 		Drivername: "postgres",
 	},

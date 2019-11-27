@@ -28,21 +28,31 @@ func (p postgresClient) Close() error {
 	return p.Db.Close()
 }
 
-func NewPostgresClient(logger *logrus.FieldLogger, config config.Config) PostgresClient {
-	db := pg.Connect(getPgConnectionOptions(config))
+func NewPostgresClientFromConfig(logger *logrus.FieldLogger, config config.Config) PostgresClient {
+	return NewPostgresClientFromPgOptions(logger, GetPgConnectionOptions(config))
+}
+
+func NewPostgresClientFromPgOptions(logger *logrus.FieldLogger, pgOptions *pg.Options) PostgresClient {
+	db := pg.Connect(pgOptions)
+	return postgresClient{
+		Logger: logger,
+		Db:     db,
+	}
+}
+func NewPostgresClient(logger *logrus.FieldLogger, db *pg.DB) PostgresClient {
 	return postgresClient{
 		Logger: logger,
 		Db:     db,
 	}
 }
 
-func getPgConnectionOptions(config config.Config) *pg.Options {
+func GetPgConnectionOptions(config config.Config) *pg.Options {
 	return &pg.Options{
 		Addr:            config.DbConfig.Address,
 		User:            config.DbConfig.Username,
 		Password:        config.DbConfig.Password,
 		Database:        config.DbConfig.Database,
-		ApplicationName: "",
+		ApplicationName: "demo",
 		ReadTimeout:     ReadTimeout,
 		WriteTimeout:    WriteTimeout,
 		PoolSize:        PoolSize,

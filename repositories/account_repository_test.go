@@ -24,14 +24,11 @@ func (a *accountRepoSuiteTest) SetupSuite() {
 	config, err := config.GetTestConfig()
 	require.Nil(a.T(), err, "Config is nil")
 
-	client := db.NewPostgresClient(config.Logger, config)
+	setup, err := testutils.SetupTestDB(db.GetPgConnectionOptions(config), "../scripts/migrations/")
+	require.NoError(a.T(), err)
 
+	client := db.NewPostgresClient(config.Logger, setup.Db)
 	a.db = client.GetConnection()
-	err = testutils.CreateSchema(a.db)
-	if err != nil {
-		require.NoError(a.T(), err)
-	}
-
 	a.accountRepository = NewAccountRepository(a.db)
 }
 
