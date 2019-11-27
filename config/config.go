@@ -47,8 +47,9 @@ func LoadConfig() (Config, error) {
 	}
 
 	loglevel := viper.GetString("loglevel")
-	getLogger(loglevel)
+	logger := getLogger(loglevel)
 
+	cfg.Logger = &logger
 	return cfg, nil
 }
 

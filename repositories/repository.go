@@ -17,20 +17,19 @@ type AccountRepository interface {
 	FindById(ctx context.Context, id string) (model.Account, error)
 
 	// Delete Account by id
-	DeleteById(ctx context.Context, id string) (model.Account, error)
+	DeleteById(ctx context.Context, id string) error
 
-	// Update balance for given account by incrementing on given value
-	UpdateBalance(ctx context.Context, id string, incr int64) error
+	// Update account
+	Update(ctx context.Context, account *model.Account) error
 }
 
 // PaymentRepository declare repository for payments
 type PaymentRepository interface {
-
 	// GetAll return all payments
 	GetAll(ctx context.Context) ([]model.Payment, error)
 
 	// Store save new payment
-	Store(ctx context.Context, payment *model.Payment) error
+	Save(ctx context.Context, payment *model.Payment) error
 
 	// Find Payment by id
 	FindById(ctx context.Context, id string) (model.Payment, error)
