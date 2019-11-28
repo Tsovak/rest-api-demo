@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestPgClientWorking(t *testing.T) {
+func TestPgClientIsWorking(t *testing.T) {
 	testConfig, err := config.GetTestConfig()
 	require.NoError(t, err)
 
