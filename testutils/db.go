@@ -25,6 +25,18 @@ func GetTestUser() *model.Account {
 	return user
 }
 
+func GetTestPayment() *model.Payment {
+	return &model.Payment{
+		ID: func() int64 {
+			return rand.Int63()
+		}(),
+		Amount:        100,
+		ToAccountID:   "123456",
+		FromAccountID: "654321",
+		Direction:     model.Outgoing,
+	}
+}
+
 func CreateSchema(db *pg.DB) error {
 	for _, model := range []interface{}{&model.Payment{}, &model.Account{}} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
