@@ -5,6 +5,8 @@ import (
 	"github.com/tsovak/rest-api-demo/api/model"
 )
 
+//go:generate mockgen -source repository.go -package mock -destination ../mock/repository.go
+
 // AccountRepository declare repository for accounts
 type AccountRepository interface {
 	// GetAll return all accounts in storage
