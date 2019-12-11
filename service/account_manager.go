@@ -14,7 +14,7 @@ type AccountManager interface {
 	// GetAllAccounts return all accounts
 	GetAllAccounts(ctx context.Context) ([]model.Account, error)
 
-	// Store save new account
+	// Save new account
 	Save(ctx context.Context, account *model.Account) error
 
 	// Find account by id
