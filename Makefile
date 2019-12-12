@@ -23,8 +23,8 @@ generate:
 
 .PHONY: unit
 unit:
-	go test -v ./... -count 10
+	go test -v ./... -count 10 -race
 
 .PHONY: test
 test: unit
-	go test -v ./... -tags integration -count 1
+	go test -v ./... -tags integration -count 1 -race
