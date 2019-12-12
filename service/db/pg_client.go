@@ -27,8 +27,8 @@ func (p postgresClient) Close() error {
 	return p.Db.Close()
 }
 
-func NewPostgresClientFromConfig(logger *logrus.Logger, config config.Config) PostgresClient {
-	return NewPostgresClientFromPgOptions(logger, GetPgConnectionOptions(config))
+func NewPostgresClientFromConfig(config config.Config) PostgresClient {
+	return NewPostgresClientFromPgOptions(config.Logger, GetPgConnectionOptions(config))
 }
 
 func NewPostgresClientFromPgOptions(logger *logrus.Logger, pgOptions *pg.Options) PostgresClient {

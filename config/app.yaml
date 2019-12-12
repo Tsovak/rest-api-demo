@@ -1,11 +1,10 @@
-server:
-  port: 8080
+serverport: 8080
 
 db:
-  address: localhost:27017
-  username: api
-  password: secretpassword
-  database: api
+  address: localhost:5432
+  username: postgres
+  password: secret
+  database: postgres
   sslmode: disable
   drivername: postgres
 
