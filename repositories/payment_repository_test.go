@@ -27,7 +27,7 @@ func (p *paymentRepoSuiteTest) SetupSuite() {
 	setup, err := testutils.SetupTestDB(db.GetPgConnectionOptions(config), "../scripts/migrations/")
 	require.NoError(p.T(), err)
 
-	client := db.NewPostgresClient(config.Logger, setup.Db)
+	client := db.NewPostgresClient(setup.Db)
 	p.db = client.GetConnection()
 	p.paymentRepository = NewPaymentRepository(p.db)
 }

@@ -17,7 +17,7 @@ func TestPgClientIsWorking(t *testing.T) {
 	setup, err := testutils.SetupTestDB(GetPgConnectionOptions(testConfig), "../../scripts/migrations/")
 	require.NoError(t, err)
 
-	client := NewPostgresClient(nil, setup.Db)
+	client := NewPostgresClient(setup.Db)
 	require.NotNil(t, client)
 	db := client.GetConnection()
 

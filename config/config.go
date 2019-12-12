@@ -1,7 +1,6 @@
 package config
 
 import (
-	log "github.com/go-kit/kit/log/logrus"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -14,7 +13,7 @@ type Config struct {
 	ServerAddress string
 	ServerPort    string
 	DbConfig      DbConfig `mapstructure:"db"`
-	Logger        *logrus.FieldLogger
+	Logger        *logrus.Logger
 }
 
 type DbConfig struct {
@@ -49,11 +48,11 @@ func LoadConfig() (Config, error) {
 	loglevel := viper.GetString("loglevel")
 	logger := getLogger(loglevel)
 
-	cfg.Logger = &logger
+	cfg.Logger = logger
 	return cfg, nil
 }
 
-func getLogger(loglevel string) logrus.FieldLogger {
+func getLogger(loglevel string) *logrus.Logger {
 	logrusLogger := logrus.New()
 	logrusLogger.SetFormatter(&logrus.JSONFormatter{})
 	level, ok := logrus.ParseLevel(loglevel)
@@ -61,9 +60,7 @@ func getLogger(loglevel string) logrus.FieldLogger {
 		level = logrus.DebugLevel
 	}
 	logrusLogger.SetLevel(level)
-
-	logger := log.NewLogrusLogger(logrusLogger).(logrus.FieldLogger)
-	return logger
+	return logrusLogger
 }
 
 // Load config without error

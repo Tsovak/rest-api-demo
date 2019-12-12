@@ -27,7 +27,7 @@ func (a *accountRepoSuiteTest) SetupSuite() {
 	setup, err := testutils.SetupTestDB(db.GetPgConnectionOptions(config), "../scripts/migrations/")
 	require.NoError(a.T(), err)
 
-	client := db.NewPostgresClient(config.Logger, setup.Db)
+	client := db.NewPostgresClient(setup.Db)
 	a.db = client.GetConnection()
 	a.accountRepository = NewAccountRepository(a.db)
 }

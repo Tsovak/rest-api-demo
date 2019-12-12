@@ -16,8 +16,7 @@ const (
 )
 
 type postgresClient struct {
-	Logger *logrus.FieldLogger
-	Db     *pg.DB
+	Db *pg.DB
 }
 
 func (p postgresClient) GetConnection() *pg.DB {
@@ -28,21 +27,20 @@ func (p postgresClient) Close() error {
 	return p.Db.Close()
 }
 
-func NewPostgresClientFromConfig(logger *logrus.FieldLogger, config config.Config) PostgresClient {
+func NewPostgresClientFromConfig(logger *logrus.Logger, config config.Config) PostgresClient {
 	return NewPostgresClientFromPgOptions(logger, GetPgConnectionOptions(config))
 }
 
-func NewPostgresClientFromPgOptions(logger *logrus.FieldLogger, pgOptions *pg.Options) PostgresClient {
+func NewPostgresClientFromPgOptions(logger *logrus.Logger, pgOptions *pg.Options) PostgresClient {
+	logrus.Debug("Trying to connect " + pgOptions.Addr)
 	db := pg.Connect(pgOptions)
 	return postgresClient{
-		Logger: logger,
-		Db:     db,
+		Db: db,
 	}
 }
-func NewPostgresClient(logger *logrus.FieldLogger, db *pg.DB) PostgresClient {
+func NewPostgresClient(db *pg.DB) PostgresClient {
 	return postgresClient{
-		Logger: logger,
-		Db:     db,
+		Db: db,
 	}
 }
 
