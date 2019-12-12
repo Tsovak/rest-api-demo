@@ -24,9 +24,7 @@ var accounts = func() []model.Account {
 	account2 := *testutils.GetTestUser()
 	account2.Name = "two"
 	account2.Balance = 200
-	result := make([]model.Account, 2)
-	result = append(result, account1, account2)
-	return result
+	return []model.Account{account1, account2}
 }
 
 func TestGetAllAccountsOk(t *testing.T) {
@@ -43,11 +41,12 @@ func TestGetAllAccountsOk(t *testing.T) {
 		Return(users, nil)
 
 	manager := NewAccountManager(mockAccountRepository)
-	expectedUsers, err := manager.GetAllAccounts(ctx)
+	receivedUsers, err := manager.GetAllAccounts(ctx)
 
 	require.Nil(t, err)
-	require.NotNil(t, expectedUsers)
-	require.True(t, reflect.DeepEqual(users, expectedUsers))
+	require.NotNil(t, receivedUsers)
+	require.Len(t, receivedUsers, len(users))
+	require.True(t, reflect.DeepEqual(users, receivedUsers))
 }
 
 func TestGetAllAccountsFail(t *testing.T) {
