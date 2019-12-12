@@ -27,25 +27,28 @@ type DbConfig struct {
 
 // LoadConfig load config from file
 func LoadConfig() (Config, error) {
-	viper.SetConfigName(configFileName)
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
+	v := viper.New()
+	v.SetConfigName(configFileName)
+	v.SetEnvPrefix("api")
+	v.SetConfigType("yaml")
+	v.AddConfigPath(".")
+	v.AddConfigPath("./config")
 
 	replacer := strings.NewReplacer(".", "_")
-	viper.SetEnvKeyReplacer(replacer)
-	viper.AutomaticEnv()
+	v.SetEnvKeyReplacer(replacer)
+	v.AutomaticEnv()
 
 	var cfg Config
-	if err := viper.ReadInConfig(); err != nil {
+	if err := v.ReadInConfig(); err != nil {
 		return Config{}, errors.Wrap(err, "Failed to read config")
 	}
 
-	err := viper.Unmarshal(&cfg)
+	err := v.Unmarshal(&cfg)
 	if err != nil {
 		return Config{}, errors.Wrap(err, "Unable to decode into struct")
 	}
 
-	loglevel := viper.GetString("loglevel")
+	loglevel := v.GetString("loglevel")
 	logger := getLogger(loglevel)
 
 	cfg.Logger = logger
