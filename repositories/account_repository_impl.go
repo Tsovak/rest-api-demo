@@ -36,7 +36,19 @@ func (a accountRepository) Save(ctx context.Context, account *model.Account) err
 	if account == nil {
 		return errors.New("Input parameter account is nil")
 	}
-	return a.Db.WithContext(ctx).Insert(account)
+
+	result, err := a.Db.WithContext(ctx).Model(account).Returning("id").Insert(&account.ID)
+	if err != nil {
+		return errors.Wrapf(err, "Failed to insert account %v", account)
+	}
+
+	if result != nil {
+		if result.RowsAffected() == 0 {
+			return errors.New("Failed to insert, affected is 0")
+		}
+	}
+
+	return nil
 }
 
 func (a accountRepository) FindById(ctx context.Context, id string) (model.Account, error) {

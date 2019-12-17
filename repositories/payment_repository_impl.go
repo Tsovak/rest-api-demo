@@ -33,9 +33,21 @@ func (p paymentRepository) GetAll(ctx context.Context) ([]model.Payment, error) 
 
 func (p paymentRepository) Save(ctx context.Context, payment *model.Payment) error {
 	if payment == nil {
-		return errors.New("Input parameter account is nil")
+		return errors.New("Input parameter payment is nil")
 	}
-	return p.Db.WithContext(ctx).Insert(payment)
+
+	result, err := p.Db.WithContext(ctx).Model(payment).Returning("id").Insert(&payment.ID)
+	if err != nil {
+		return errors.Wrapf(err, "Failed to insert payment %v", payment)
+	}
+
+	if result != nil {
+		if result.RowsAffected() == 0 {
+			return errors.New("Failed to insert, affected is 0")
+		}
+	}
+
+	return nil
 }
 
 func (p paymentRepository) FindById(ctx context.Context, id string) (model.Payment, error) {
