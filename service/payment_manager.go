@@ -13,6 +13,7 @@ import (
 type PaymentManager interface {
 	// GetAllPayments return all payments
 	GetAllPayments(ctx context.Context) ([]model.Payment, error)
+	CreatePayment(ctx context.Context, payment *model.Payment) error
 }
 
 type paymentManager struct {
@@ -31,4 +32,12 @@ func (p *paymentManager) GetAllPayments(ctx context.Context) ([]model.Payment, e
 		return nil, errors.Wrap(err, "Failed to get all payments ")
 	}
 	return payments, nil
+}
+
+func (p *paymentManager) CreatePayment(ctx context.Context, payment *model.Payment) error {
+	err := p.paymentRepository.Save(ctx, payment)
+	if err != nil {
+		return errors.Wrap(err, "Failed to save payment")
+	}
+	return nil
 }
