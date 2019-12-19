@@ -124,24 +124,21 @@ func SetupTestDB(pgOptions *pg.Options, migrationsDir string) (*DBSetup, error) 
 
 	_, _, err = migrationCollection.Run(db, "init")
 	if err != nil {
-		cleanError := cleaner()
-		cleanError = errors.Wrap(err, "Clean error")
-		return nil, errors.Wrap(cleanError, "Could not init migrations")
+		_ := cleaner()
+		return nil, errors.Wrap(err, "Could not init migrations")
 
 	}
 
 	err = migrationCollection.DiscoverSQLMigrations(migrationsDir)
 	if err != nil {
-		cleanError := cleaner()
-		cleanError = errors.Wrap(err, "Clean error")
-		return nil, errors.Wrap(cleanError, "Failed to read migrations")
+		_ := cleaner()
+		return nil, errors.Wrap(err, "Failed to read migrations")
 	}
 
 	_, _, err = migrationCollection.Run(db, "up")
 	if err != nil {
-		cleanError := cleaner()
-		cleanError = errors.Wrap(err, "Clean error")
-		return nil, errors.Wrap(cleanError, "Could not migrate")
+		_ := cleaner()
+		return nil, errors.Wrap(err, "Could not migrate")
 	}
 	return &DBSetup{
 		Db:        db,
