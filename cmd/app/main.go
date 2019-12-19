@@ -14,13 +14,13 @@ import (
 
 func main() {
 
-	config, err := config.LoadConfig()
+	configFile, err := config.LoadConfig()
 	if err != nil {
 		println(err.Error())
 		os.Exit(-1)
 	}
 
-	pgClient := db.NewPostgresClientFromConfig(config)
+	pgClient := db.NewPostgresClientFromConfig(configFile)
 	connection := pgClient.GetConnection()
 	defer connection.Close()
 
@@ -32,13 +32,15 @@ func main() {
 
 	accountManager := service.NewAccountManager(accountRepository)
 	paymentManager := service.NewPaymentManager(paymentRepository)
-	apiServer := api.NewApiServer(accountManager, paymentManager, config.Logger)
+	apiServer := api.NewApiServer(accountManager, paymentManager, configFile.Logger)
 
 	e.Router().Add("GET", "/accounts", apiServer.GetAllAccounts)
 	e.Router().Add("POST", "/accounts", apiServer.CreateAccount)
-	err = e.Start(fmt.Sprintf(":%v", config.ServerPort))
+	e.Router().Add("GET", "/accounts/:id/payments", apiServer.GetAccountPayments)
+	e.Router().Add("POST", "/payments", apiServer.CreatePayment)
+	err = e.Start(fmt.Sprintf(":%v", configFile.ServerPort))
 	if err != nil {
-		config.Logger.Error("Cannot start the server")
+		configFile.Logger.Error("Cannot start the server")
 		os.Exit(-1)
 	}
 }

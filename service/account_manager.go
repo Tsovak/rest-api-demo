@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	pg "github.com/go-pg/pg/v9"
 	"github.com/pkg/errors"
 	"github.com/tsovak/rest-api-demo/api/model"
 	"github.com/tsovak/rest-api-demo/repositories"
@@ -24,7 +25,7 @@ type AccountManager interface {
 	DeleteById(ctx context.Context, id string) error
 
 	// Update account
-	Update(ctx context.Context, account *model.Account) error
+	Update(ctx context.Context, account *model.Account, fn func(*pg.Tx) error) error
 }
 
 type accountManager struct {
@@ -69,8 +70,8 @@ func (m *accountManager) DeleteById(ctx context.Context, id string) error {
 	return nil
 }
 
-func (m *accountManager) Update(ctx context.Context, account *model.Account) error {
-	err := m.accountRepository.Update(ctx, account)
+func (m *accountManager) Update(ctx context.Context, account *model.Account, fn func(*pg.Tx) error) error {
+	err := m.accountRepository.Update(ctx, account, fn)
 	if err != nil {
 		return errors.Wrap(err, "Failed to update account")
 	}

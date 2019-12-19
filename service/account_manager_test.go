@@ -186,12 +186,12 @@ func TestUpdateAccountsOk(t *testing.T) {
 	user := account()
 	mockAccountRepository.
 		EXPECT().
-		Update(ctx, user).
+		Update(ctx, user, nil).
 		AnyTimes().
 		Return(nil)
 
 	manager := NewAccountManager(mockAccountRepository)
-	err := manager.Update(ctx, user)
+	err := manager.Update(ctx, user, nil)
 	require.NoError(t, err)
 }
 
@@ -204,11 +204,11 @@ func TestUpdateAccountsFail(t *testing.T) {
 	user := account()
 	mockAccountRepository.
 		EXPECT().
-		Update(ctx, user).
+		Update(ctx, user, nil).
 		AnyTimes().
 		Return(errors.New("cannot update account"))
 
 	manager := NewAccountManager(mockAccountRepository)
-	err := manager.Update(ctx, user)
+	err := manager.Update(ctx, user, nil)
 	require.Error(t, err)
 }

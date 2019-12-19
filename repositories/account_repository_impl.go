@@ -84,14 +84,50 @@ func (a accountRepository) DeleteById(ctx context.Context, id string) error {
 	return a.Db.WithContext(ctx).Delete(account)
 }
 
-func (a accountRepository) Update(ctx context.Context, account *model.Account) error {
+func (a accountRepository) Update(ctx context.Context, account *model.Account, fn func(tx *pg.Tx) error) error {
 	if account == nil {
 		return errors.New("Account is nil")
 	}
 
-	err := a.Db.WithContext(ctx).Update(account)
-	if err != nil {
-		return errors.Wrap(err, fmt.Sprintf("Cannot update balance for account with id %v", account.ID))
+	// prepare the update function which will be executed later in one tx
+	updateTransactionFn := func(tx *pg.Tx) error {
+		err := tx.Update(account)
+		if err != nil {
+			return errors.Wrap(err, fmt.Sprintf("Cannot update balance for account with id %v", account.ID))
+		}
+		return nil
 	}
+
+	// start a transaction
+	tx, err := a.Db.WithContext(ctx).Begin()
+	if err != nil {
+		return errors.Wrap(err, "Cannot start transaction")
+	}
+
+	// if additional update function is not nil we need to execute it
+	if fn != nil {
+		// do update
+		err = fn(tx)
+		if err != nil {
+			_ = tx.Rollback()
+			_ = tx.Close()
+			return err
+		}
+	}
+
+	// do update account
+	err = updateTransactionFn(tx)
+	if err != nil {
+		_ = tx.Rollback()
+		_ = tx.Close()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		_ = tx.Close()
+		return err
+	}
+
 	return nil
 }

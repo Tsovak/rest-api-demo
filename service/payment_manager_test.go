@@ -33,7 +33,7 @@ func TestGetAllPaymentsOk(t *testing.T) {
 		Return(payments, nil)
 
 	manager := NewPaymentManager(mockPaymentRepository)
-	receivedPayments, err := manager.GetAllPayments(ctx)
+	receivedPayments, err := manager.GetAccountPayments(ctx)
 
 	require.Nil(t, err)
 	require.NotNil(t, receivedPayments)
@@ -54,7 +54,7 @@ func TestGetAllPaymentsFail(t *testing.T) {
 		Return(nil, errors.New("cannot get payments"))
 
 	manager := NewPaymentManager(mockPaymentRepository)
-	receivedPayments, err := manager.GetAllPayments(ctx)
+	receivedPayments, err := manager.GetAccountPayments(ctx)
 
 	require.Error(t, err)
 	require.Nil(t, receivedPayments)

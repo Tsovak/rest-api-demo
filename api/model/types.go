@@ -27,7 +27,6 @@ type PaymentRequest struct {
 	Amount        int64  `json:"amount"`
 	ToAccountID   string `json:"to_id" `
 	FromAccountID string `json:"from_id"`
-	Direction     string `json:"direction"`
 }
 
 type AccountResponse struct {

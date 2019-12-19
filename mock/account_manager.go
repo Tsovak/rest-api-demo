@@ -6,6 +6,7 @@ package mock
 
 import (
 	context "context"
+	v9 "github.com/go-pg/pg/v9"
 	gomock "github.com/golang/mock/gomock"
 	model "github.com/tsovak/rest-api-demo/api/model"
 	reflect "reflect"
@@ -93,15 +94,15 @@ func (mr *MockAccountManagerMockRecorder) DeleteById(ctx, id interface{}) *gomoc
 }
 
 // Update mocks base method
-func (m *MockAccountManager) Update(ctx context.Context, account *model.Account) error {
+func (m *MockAccountManager) Update(ctx context.Context, account *model.Account, fn func(*v9.Tx) error) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, account)
+	ret := m.ctrl.Call(m, "Update", ctx, account, fn)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Update indicates an expected call of Update
-func (mr *MockAccountManagerMockRecorder) Update(ctx, account interface{}) *gomock.Call {
+func (mr *MockAccountManagerMockRecorder) Update(ctx, account, fn interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountManager)(nil).Update), ctx, account)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountManager)(nil).Update), ctx, account, fn)
 }

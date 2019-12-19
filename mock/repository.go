@@ -6,6 +6,7 @@ package mock
 
 import (
 	context "context"
+	v9 "github.com/go-pg/pg/v9"
 	gomock "github.com/golang/mock/gomock"
 	model "github.com/tsovak/rest-api-demo/api/model"
 	reflect "reflect"
@@ -93,17 +94,17 @@ func (mr *MockAccountRepositoryMockRecorder) DeleteById(ctx, id interface{}) *go
 }
 
 // Update mocks base method
-func (m *MockAccountRepository) Update(ctx context.Context, account *model.Account) error {
+func (m *MockAccountRepository) Update(ctx context.Context, account *model.Account, fn func(*v9.Tx) error) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", ctx, account)
+	ret := m.ctrl.Call(m, "Update", ctx, account, fn)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Update indicates an expected call of Update
-func (mr *MockAccountRepositoryMockRecorder) Update(ctx, account interface{}) *gomock.Call {
+func (mr *MockAccountRepositoryMockRecorder) Update(ctx, account, fn interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountRepository)(nil).Update), ctx, account)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountRepository)(nil).Update), ctx, account, fn)
 }
 
 // MockPaymentRepository is a mock of PaymentRepository interface
@@ -145,17 +146,22 @@ func (mr *MockPaymentRepositoryMockRecorder) GetAll(ctx interface{}) *gomock.Cal
 }
 
 // Save mocks base method
-func (m *MockPaymentRepository) Save(ctx context.Context, payment *model.Payment) error {
+func (m *MockPaymentRepository) Save(ctx context.Context, payment ...*model.Payment) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", ctx, payment)
+	varargs := []interface{}{ctx}
+	for _, a := range payment {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "Save", varargs...)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Save indicates an expected call of Save
-func (mr *MockPaymentRepositoryMockRecorder) Save(ctx, payment interface{}) *gomock.Call {
+func (mr *MockPaymentRepositoryMockRecorder) Save(ctx interface{}, payment ...interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockPaymentRepository)(nil).Save), ctx, payment)
+	varargs := append([]interface{}{ctx}, payment...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockPaymentRepository)(nil).Save), varargs...)
 }
 
 // FindById mocks base method
@@ -171,4 +177,38 @@ func (m *MockPaymentRepository) FindById(ctx context.Context, id string) (model.
 func (mr *MockPaymentRepositoryMockRecorder) FindById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockPaymentRepository)(nil).FindById), ctx, id)
+}
+
+// GetPaymentsByAccountId mocks base method
+func (m *MockPaymentRepository) GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetPaymentsByAccountId", ctx, accountId)
+	ret0, _ := ret[0].([]model.Payment)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetPaymentsByAccountId indicates an expected call of GetPaymentsByAccountId
+func (mr *MockPaymentRepositoryMockRecorder) GetPaymentsByAccountId(ctx, accountId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPaymentsByAccountId", reflect.TypeOf((*MockPaymentRepository)(nil).GetPaymentsByAccountId), ctx, accountId)
+}
+
+// GetSaveTransaction mocks base method
+func (m *MockPaymentRepository) GetSaveTransaction(ctx context.Context, payments ...*model.Payment) func(*v9.Tx) error {
+	m.ctrl.T.Helper()
+	varargs := []interface{}{ctx}
+	for _, a := range payments {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "GetSaveTransaction", varargs...)
+	ret0, _ := ret[0].(func(*v9.Tx) error)
+	return ret0
+}
+
+// GetSaveTransaction indicates an expected call of GetSaveTransaction
+func (mr *MockPaymentRepositoryMockRecorder) GetSaveTransaction(ctx interface{}, payments ...interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]interface{}{ctx}, payments...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSaveTransaction", reflect.TypeOf((*MockPaymentRepository)(nil).GetSaveTransaction), varargs...)
 }

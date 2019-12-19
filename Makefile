@@ -1,6 +1,7 @@
 export GOPATH ?= $(shell go env GOPATH)
 export GO111MODULE ?= on
 
+BIN_DIR = bin
 APPNAME = app
 LDFLAGS ?=
 
@@ -15,7 +16,8 @@ mod:
 
 .PHONY: build
 build:
-	go build -o $(APPNAME) -ldflags "$(LDFLAGS)" *.go
+	go build -ldflags "$(LDFLAGS)" -o $(BIN_DIR)/$(APPNAME) cmd/app/*.go
+	go build -ldflags "$(LDFLAGS)" -o $(BIN_DIR)/migrate    cmd/migration/*.go
 
 .PHONY: generate
 generate:
@@ -28,3 +30,11 @@ unit:
 .PHONY: test
 test: unit
 	go test -v ./... -tags integration -count 1 -race
+
+.PHONY: migrate
+migrate: ## migration
+	go run ./cmd/migration/main.go -dir scripts/migrations -init
+
+.PHONY: lint
+lint: ## linter
+	@golangci-lint --color=always run ./... -v --timeout 5m

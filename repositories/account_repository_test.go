@@ -21,10 +21,10 @@ type accountRepoSuiteTest struct {
 }
 
 func (a *accountRepoSuiteTest) SetupSuite() {
-	config, err := config.GetTestConfig()
+	configFile, err := config.GetTestConfig()
 	require.Nil(a.T(), err, "Config is nil")
 
-	setup, err := testutils.SetupTestDB(db.GetPgConnectionOptions(config), "../scripts/migrations/")
+	setup, err := testutils.SetupTestDB(db.GetPgConnectionOptions(configFile), "../scripts/migrations/")
 	require.NoError(a.T(), err)
 
 	client := db.NewPostgresClient(setup.Db)
@@ -81,7 +81,7 @@ func (a *accountRepoSuiteTest) TestAccountRepository_UpdateBalance() {
 	require.NoError(a.T(), err, "Cannot save user")
 
 	user.Balance += amount
-	err = a.accountRepository.Update(context.Background(), user)
+	err = a.accountRepository.Update(context.Background(), user, nil)
 	require.NoError(a.T(), err, "Cannot update balance")
 
 	dbUser, err := a.accountRepository.FindById(context.Background(), userIdString)

@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"context"
+	pg "github.com/go-pg/pg/v9"
 	"github.com/tsovak/rest-api-demo/api/model"
 )
 
@@ -22,7 +23,7 @@ type AccountRepository interface {
 	DeleteById(ctx context.Context, id string) error
 
 	// Update account
-	Update(ctx context.Context, account *model.Account) error
+	Update(ctx context.Context, account *model.Account, fn func(tx *pg.Tx) error) error
 }
 
 // PaymentRepository declare repository for payments
@@ -31,8 +32,14 @@ type PaymentRepository interface {
 	GetAll(ctx context.Context) ([]model.Payment, error)
 
 	// Save new payment
-	Save(ctx context.Context, payment *model.Payment) error
+	Save(ctx context.Context, payment ...*model.Payment) error
 
 	// Find Payment by id
 	FindById(ctx context.Context, id string) (model.Payment, error)
+
+	// Get Payments by account id
+	GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error)
+
+	// Get function for save payments without commit in DB
+	GetSaveTransaction(ctx context.Context, payments ...*model.Payment) func(tx *pg.Tx) error
 }
