@@ -25,7 +25,9 @@ func main() {
 	defer connection.Close()
 
 	e := echo.New()
-	e.Use(middleware.Logger())
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Output: cfg.Logger.Out,
+	}))
 
 	accountRepository := repositories.NewAccountRepository(connection)
 	paymentRepository := repositories.NewPaymentRepository(connection)
