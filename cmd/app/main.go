@@ -19,7 +19,7 @@ func main() {
 		println(err.Error())
 		os.Exit(-1)
 	}
-
+	configFile.Logger.Debugf("DB address is %v", configFile.DbConfig.Address)
 	pgClient := db.NewPostgresClientFromConfig(configFile)
 	connection := pgClient.GetConnection()
 	defer connection.Close()
