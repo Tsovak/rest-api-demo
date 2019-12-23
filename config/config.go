@@ -9,6 +9,7 @@ import (
 
 const configFileName = "app"
 
+// Config declare the application configuration variables
 type Config struct {
 	ServerAddress string
 	ServerPort    string
@@ -16,6 +17,7 @@ type Config struct {
 	Logger        *logrus.Logger
 }
 
+// DbConfig declare database variables
 type DbConfig struct {
 	Address    string
 	Username   string

@@ -1,3 +1,4 @@
+// The application represents for routing the endpoints
 package main
 
 import (
@@ -13,12 +14,12 @@ import (
 )
 
 func main() {
-
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		println(err.Error())
 		os.Exit(-1)
 	}
+
 	cfg.Logger.Debugf("DB address is %v", cfg.DbConfig.Address)
 	pgClient := db.NewPostgresClientFromConfig(cfg)
 	connection := pgClient.GetConnection()

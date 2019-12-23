@@ -11,6 +11,7 @@ var cfg = Config{
 	},
 }
 
+// GetTestConfig returns config for tests
 func GetTestConfig() (Config, error) {
 	return cfg, nil
 }

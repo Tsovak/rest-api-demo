@@ -38,12 +38,15 @@ func NewPostgresClientFromPgOptions(logger *logrus.Logger, pgOptions *pg.Options
 		Db: db,
 	}
 }
+
+// NewPostgresClient returns a PostgresClient
 func NewPostgresClient(db *pg.DB) PostgresClient {
 	return postgresClient{
 		Db: db,
 	}
 }
 
+// GetPgConnectionOptions returns pg Options based on config
 func GetPgConnectionOptions(config config.Config) *pg.Options {
 	return &pg.Options{
 		Addr:            config.DbConfig.Address,

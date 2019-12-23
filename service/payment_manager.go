@@ -10,7 +10,7 @@ import (
 
 //go:generate mockgen -source payment_manager.go -package mock -destination ../mock/payment_manager.go
 
-// PaymentManager declare interface to access accounts
+// PaymentManager declare interface to access an accounts
 type PaymentManager interface {
 	// GetAccountPayments return all payments
 	GetAccountPayments(ctx context.Context) ([]model.Payment, error)
@@ -29,6 +29,7 @@ type paymentManager struct {
 	paymentRepository repositories.PaymentRepository
 }
 
+// NewPaymentManager returns interface to access an accounts
 func NewPaymentManager(repository repositories.PaymentRepository) PaymentManager {
 	return &paymentManager{
 		paymentRepository: repository,

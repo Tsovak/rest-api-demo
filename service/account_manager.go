@@ -10,7 +10,7 @@ import (
 
 //go:generate mockgen -source account_manager.go -package mock -destination ../mock/account_manager.go
 
-// AccountManager declare interface to access accounts
+// AccountManager declare interface to access an accounts
 type AccountManager interface {
 	// GetAllAccounts return all accounts
 	GetAllAccounts(ctx context.Context) ([]model.Account, error)
@@ -32,6 +32,7 @@ type accountManager struct {
 	accountRepository repositories.AccountRepository
 }
 
+// NewAccountManager returns interface to access an account
 func NewAccountManager(accountRepository repositories.AccountRepository) AccountManager {
 	return &accountManager{
 		accountRepository: accountRepository,

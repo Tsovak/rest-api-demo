@@ -9,9 +9,9 @@ import (
 	"github.com/pkg/errors"
 	"github.com/tsovak/rest-api-demo/api/model"
 	"math/rand"
-	"net"
 )
 
+// GetTestUser returns the new random test User
 func GetTestUser() *model.Account {
 	user := &model.Account{
 		ID: func() int64 {
@@ -25,6 +25,7 @@ func GetTestUser() *model.Account {
 	return user
 }
 
+// GetTestPayment returns a new random payment
 func GetTestPayment() *model.Payment {
 	return &model.Payment{
 		ID: func() int64 {
@@ -37,6 +38,7 @@ func GetTestPayment() *model.Payment {
 	}
 }
 
+// CreateSchema create the DB schemas
 func CreateSchema(db *pg.DB) error {
 	for _, model := range []interface{}{&model.Payment{}, &model.Account{}} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
@@ -56,6 +58,7 @@ type DBSetup struct {
 	Cleaner   func() error
 }
 
+// SetupTestDB performs a db and migration for integration tests
 func SetupTestDB(pgOptions *pg.Options, migrationsDir string) (*DBSetup, error) {
 	var err error
 
@@ -124,20 +127,20 @@ func SetupTestDB(pgOptions *pg.Options, migrationsDir string) (*DBSetup, error) 
 
 	_, _, err = migrationCollection.Run(db, "init")
 	if err != nil {
-		_ := cleaner()
+		_ = cleaner()
 		return nil, errors.Wrap(err, "Could not init migrations")
 
 	}
 
 	err = migrationCollection.DiscoverSQLMigrations(migrationsDir)
 	if err != nil {
-		_ := cleaner()
+		_ = cleaner()
 		return nil, errors.Wrap(err, "Failed to read migrations")
 	}
 
 	_, _, err = migrationCollection.Run(db, "up")
 	if err != nil {
-		_ := cleaner()
+		_ = cleaner()
 		return nil, errors.Wrap(err, "Could not migrate")
 	}
 	return &DBSetup{
@@ -145,28 +148,4 @@ func SetupTestDB(pgOptions *pg.Options, migrationsDir string) (*DBSetup, error) 
 		PgOptions: options,
 		Cleaner:   cleaner,
 	}, nil
-}
-
-func GetFreePortSilent() int {
-	for {
-		port, err := GetFreePort()
-		if err != nil {
-			continue
-		}
-		return port
-	}
-}
-
-func GetFreePort() (int, error) {
-	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
-	if err != nil {
-		return 0, err
-	}
-
-	l, err := net.ListenTCP("tcp", addr)
-	if err != nil {
-		return 0, err
-	}
-	defer l.Close()
-	return l.Addr().(*net.TCPAddr).Port, nil
 }
