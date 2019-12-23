@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
@@ -32,13 +31,13 @@ func (s *ApiServer) CreateAccount(ctx echo.Context) error {
 	body := ctx.Request().Body
 	if body == nil {
 		s.logger.Warn("Body is nil")
-		return ctx.JSON(http.StatusBadRequest, errors.New("Body is nil").Error())
+		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("Body is nil"))
 	}
 
 	decoder := json.NewDecoder(body)
 	err := decoder.Decode(&accountRequest)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, errors.New("cannot decode").Error())
+		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("cannot decode"))
 	}
 
 	account := model.Account{
@@ -49,7 +48,7 @@ func (s *ApiServer) CreateAccount(ctx echo.Context) error {
 	}
 	err = s.accountManager.Save(context, &account)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, err.Error())
+		return ctx.JSON(http.StatusInternalServerError, NewErrorMessage(err.Error()))
 	}
 
 	return ctx.JSON(http.StatusOK, account)
@@ -72,7 +71,7 @@ func (s *ApiServer) GetAccountPayments(ctx echo.Context) error {
 	payments, err := s.paymentManager.GetPaymentsByAccountId(context, accountId)
 	if err != nil {
 		s.logger.WithContext(context).Error(err)
-		return ctx.JSON(http.StatusInternalServerError, err.Error())
+		return ctx.JSON(http.StatusInternalServerError, NewErrorMessage(err.Error()))
 	}
 
 	var localPaymentResponse = make([]model.PaymentResponse, len(payments))
@@ -98,37 +97,37 @@ func (s *ApiServer) CreatePayment(ctx echo.Context) error {
 	body := ctx.Request().Body
 	if body == nil {
 		s.logger.Warn("Body is nil")
-		return ctx.JSON(http.StatusBadRequest, errors.New("body is nil").Error())
+		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("body is nil"))
 	}
 
 	decoder := json.NewDecoder(body)
 	err := decoder.Decode(&localPayment)
 	if err != nil {
-		return ctx.JSON(http.StatusBadRequest, errors.New("cannot decode").Error())
+		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("cannot decode"))
 	}
 
 	fromAccount, err := s.accountManager.FindById(context, localPayment.FromAccountID)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, err.Error())
+		return ctx.JSON(http.StatusInternalServerError, NewErrorMessage(err.Error()))
 	}
 	if fromAccount == (model.Account{}) {
 		return ctx.JSON(http.StatusNotFound,
-			fmt.Errorf(fmt.Sprintf("account id=%v does not exist", localPayment.FromAccountID)).Error())
+			NewErrorMessage(fmt.Sprintf("account id=%v does not exist", localPayment.FromAccountID)))
 	}
 
 	if fromAccount.Balance < localPayment.Amount {
 		// we cannot credit if you have not enough money
 		return ctx.JSON(http.StatusBadRequest,
-			fmt.Errorf(fmt.Sprintf("account id=%v has not enough money", localPayment.FromAccountID)).Error())
+			NewErrorMessage(fmt.Sprintf("account id=%v has not enough money", localPayment.FromAccountID)))
 	}
 
 	toAccount, err := s.accountManager.FindById(context, localPayment.ToAccountID)
 	if err != nil {
-		return ctx.JSON(http.StatusInternalServerError, err.Error())
+		return ctx.JSON(http.StatusInternalServerError, NewErrorMessage(err.Error()))
 	}
 	if toAccount == (model.Account{}) {
 		return ctx.JSON(http.StatusNotFound,
-			fmt.Errorf(fmt.Sprintf("account id=%v does not exist", localPayment.ToAccountID)).Error())
+			NewErrorMessage(fmt.Sprintf("account id=%v does not exist", localPayment.ToAccountID)))
 	}
 
 	// now we need to change the balances
