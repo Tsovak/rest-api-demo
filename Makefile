@@ -4,6 +4,7 @@ export GO111MODULE ?= on
 BIN_DIR = bin
 APPNAME = app
 LDFLAGS ?=
+COVERPROFILE ?= coverage.txt
 
 #.DEFAULT_GOAL := all
 
@@ -13,6 +14,13 @@ all: build
 .PHONY: mod
 mod:
 	go mod download
+
+.PHONY: clean
+clean: ## run all cleanup tasks
+	go clean ./...
+	rm -f $(COVERPROFILE)
+	rm -rf $(BIN_DIR)
+
 
 .PHONY: build
 build:
@@ -30,6 +38,11 @@ unit:
 .PHONY: test
 test: unit
 	go test -v ./... -tags integration -count 10 -race --failfast
+
+
+.PHONY: test-with-coverage
+test-with-coverage:
+	go test -v ./... -tags integration -count 1 --coverprofile=$(COVERPROFILE) --covermode=count
 
 .PHONY: migrate
 migrate: ## migration
