@@ -9,4 +9,4 @@ db:
   drivername: postgres
 
 
-loglevel: info
+loglevel: debug
