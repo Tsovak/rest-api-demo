@@ -29,7 +29,7 @@ unit:
 
 .PHONY: test
 test: unit
-	go test -v ./... -tags integration -count 1 -race
+	go test -v ./... -tags integration -count 10 -race --failfast
 
 .PHONY: migrate
 migrate: ## migration
