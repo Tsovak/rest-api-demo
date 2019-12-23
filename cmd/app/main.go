@@ -14,13 +14,13 @@ import (
 
 func main() {
 
-	configFile, err := config.LoadConfig()
+	cfg, err := config.LoadConfig()
 	if err != nil {
 		println(err.Error())
 		os.Exit(-1)
 	}
-	configFile.Logger.Debugf("DB address is %v", configFile.DbConfig.Address)
-	pgClient := db.NewPostgresClientFromConfig(configFile)
+	cfg.Logger.Debugf("DB address is %v", cfg.DbConfig.Address)
+	pgClient := db.NewPostgresClientFromConfig(cfg)
 	connection := pgClient.GetConnection()
 	defer connection.Close()
 
@@ -32,15 +32,15 @@ func main() {
 
 	accountManager := service.NewAccountManager(accountRepository)
 	paymentManager := service.NewPaymentManager(paymentRepository)
-	apiServer := api.NewApiServer(accountManager, paymentManager, configFile.Logger)
+	apiServer := api.NewApiServer(accountManager, paymentManager, cfg.Logger)
 
 	e.Router().Add("GET", "/accounts", apiServer.GetAllAccounts)
 	e.Router().Add("POST", "/accounts", apiServer.CreateAccount)
 	e.Router().Add("GET", "/accounts/:id/payments", apiServer.GetAccountPayments)
 	e.Router().Add("POST", "/payments", apiServer.CreatePayment)
-	err = e.Start(fmt.Sprintf(":%v", configFile.ServerPort))
+	err = e.Start(fmt.Sprintf(":%v", cfg.ServerPort))
 	if err != nil {
-		configFile.Logger.Error("Cannot start the server")
+		cfg.Logger.Error("Cannot start the server")
 		os.Exit(-1)
 	}
 }
