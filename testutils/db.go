@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/go-pg/migrations/v7"
 	"github.com/go-pg/pg/v9"
-	"github.com/go-pg/pg/v9/orm"
 	"github.com/ory/dockertest/v3"
 	"github.com/pkg/errors"
 	"github.com/tsovak/rest-api-demo/api/model"
@@ -36,20 +35,6 @@ func GetTestPayment() *model.Payment {
 		FromAccountID: "654321",
 		Direction:     model.Outgoing,
 	}
-}
-
-// CreateSchema create the DB schemas
-func CreateSchema(db *pg.DB) error {
-	for _, model := range []interface{}{&model.Payment{}, &model.Account{}} {
-		err := db.CreateTable(model, &orm.CreateTableOptions{
-			Temp:          true,
-			FKConstraints: true,
-		})
-		if err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 type DBSetup struct {
