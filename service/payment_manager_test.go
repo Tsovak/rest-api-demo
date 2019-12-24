@@ -59,3 +59,85 @@ func TestGetAllPaymentsFail(t *testing.T) {
 	require.Error(t, err)
 	require.Nil(t, receivedPayments)
 }
+
+func TestCreatePaymentFail(t *testing.T) {
+	mc := gomock.NewController(t)
+	ctx := context.Background()
+	defer mc.Finish()
+
+	mockPaymentRepository := mock.NewMockPaymentRepository(mc)
+	mockPaymentRepository.
+		EXPECT().
+		Save(ctx, nil).
+		AnyTimes().
+		Return(errors.New("cannot create payment"))
+
+	manager := NewPaymentManager(mockPaymentRepository)
+	err := manager.CreatePayments(ctx, nil)
+
+	require.Error(t, err)
+}
+
+func TestCreatePaymentOk(t *testing.T) {
+	mc := gomock.NewController(t)
+	ctx := context.Background()
+	defer mc.Finish()
+
+	payment := testutils.GetTestPayment()
+	mockPaymentRepository := mock.NewMockPaymentRepository(mc)
+	mockPaymentRepository.
+		EXPECT().
+		Save(ctx, payment).
+		AnyTimes().
+		Return(nil)
+
+	manager := NewPaymentManager(mockPaymentRepository)
+	err := manager.CreatePayments(ctx, payment)
+
+	require.NoError(t, err)
+}
+
+func TestGetPaymentsByAccountIdOk(t *testing.T) {
+	mc := gomock.NewController(t)
+	ctx := context.Background()
+	defer mc.Finish()
+
+	payment := testutils.GetTestPayment()
+	payments := []model.Payment{*payment}
+
+	mockPaymentRepository := mock.NewMockPaymentRepository(mc)
+	mockPaymentRepository.
+		EXPECT().
+		GetPaymentsByAccountId(ctx, payment.FromAccountID).
+		AnyTimes().
+		Return(payments, nil)
+
+	manager := NewPaymentManager(mockPaymentRepository)
+	receivedPayments, err := manager.GetPaymentsByAccountId(ctx, payment.FromAccountID)
+
+	require.NoError(t, err)
+	require.NotNil(t, receivedPayments)
+	require.Len(t, receivedPayments, len(payments))
+	require.True(t, reflect.DeepEqual(payments, receivedPayments))
+}
+
+func TestGetPaymentsByAccountIdFail(t *testing.T) {
+	mc := gomock.NewController(t)
+	ctx := context.Background()
+	defer mc.Finish()
+
+	payment := testutils.GetTestPayment()
+
+	mockPaymentRepository := mock.NewMockPaymentRepository(mc)
+	mockPaymentRepository.
+		EXPECT().
+		GetPaymentsByAccountId(ctx, payment.FromAccountID).
+		AnyTimes().
+		Return(nil, errors.New("cannot find the payment"))
+
+	manager := NewPaymentManager(mockPaymentRepository)
+	receivedPayments, err := manager.GetPaymentsByAccountId(ctx, payment.FromAccountID)
+
+	require.Error(t, err)
+	require.Nil(t, receivedPayments)
+}
