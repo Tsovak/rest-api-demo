@@ -32,9 +32,9 @@ The project has a Dockerfile. It's simple to build by Docker. <br>
 Run the command in the project base dir 
 `docker build -t rest-api-demo .` or `make install_deps build` 
 
-You able to run all necessary services via docker-compose. 
+You are able to run all necessary services via docker-compose. 
 `docker-compose up` <br>
-Docker-compose will build the Dockerfile, setup the Postgres, run the migrations, start the application, prepare the swagger-ui 
+Docker-compose will build the Dockerfile, setup the Postgres, run the migrations, start the application, prepare the swagger-ui.
 
 ## Deploy 
 
@@ -52,7 +52,7 @@ Read go docs on http://localhost:6060/pkg/github.com/tsovak/rest-api-demo/.
 
 ### API Documentation
 
-API docs available by swagger. 
+API docs are available by swagger. 
 Just deploy using docker-compose and open `http://localhost:8888/#/`. Or open https://app.swaggerhub.com/apis-docs/Tsovak/go-rest-api/1.0.0 
 
 ## Examples
