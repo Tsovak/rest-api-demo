@@ -64,33 +64,33 @@ func (mr *MockAccountManagerMockRecorder) Save(ctx, account interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockAccountManager)(nil).Save), ctx, account)
 }
 
-// FindById mocks base method
-func (m *MockAccountManager) FindById(ctx context.Context, id string) (model.Account, error) {
+// FindByID mocks base method
+func (m *MockAccountManager) FindByID(ctx context.Context, id string) (model.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindById", ctx, id)
+	ret := m.ctrl.Call(m, "FindByID", ctx, id)
 	ret0, _ := ret[0].(model.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindById indicates an expected call of FindById
+// FindByID indicates an expected call of FindByID
 func (mr *MockAccountManagerMockRecorder) FindById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockAccountManager)(nil).FindById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockAccountManager)(nil).FindByID), ctx, id)
 }
 
-// DeleteById mocks base method
-func (m *MockAccountManager) DeleteById(ctx context.Context, id string) error {
+// DeleteByID mocks base method
+func (m *MockAccountManager) DeleteByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteById", ctx, id)
+	ret := m.ctrl.Call(m, "DeleteByID", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteById indicates an expected call of DeleteById
+// DeleteByID indicates an expected call of DeleteByID
 func (mr *MockAccountManagerMockRecorder) DeleteById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteById", reflect.TypeOf((*MockAccountManager)(nil).DeleteById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByID", reflect.TypeOf((*MockAccountManager)(nil).DeleteByID), ctx, id)
 }
 
 // Update mocks base method

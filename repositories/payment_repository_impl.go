@@ -92,7 +92,7 @@ func (p paymentRepository) Save(ctx context.Context, payments ...*model.Payment)
 	return nil
 }
 
-func (p paymentRepository) FindById(ctx context.Context, id string) (model.Payment, error) {
+func (p paymentRepository) FindByID(ctx context.Context, id string) (model.Payment, error) {
 	if len(id) == 0 {
 		return model.Payment{}, errors.New("Payment id is incorrect")
 	}
@@ -111,20 +111,20 @@ func (p paymentRepository) FindById(ctx context.Context, id string) (model.Payme
 	return payment, err
 }
 
-func (p paymentRepository) GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error) {
-	if len(accountId) == 0 {
-		return nil, errors.New("accountId id is incorrect")
+func (p paymentRepository) GetPaymentsByAccountID(ctx context.Context, accountID string) ([]model.Payment, error) {
+	if len(accountID) == 0 {
+		return nil, errors.New("accountID id is incorrect")
 	}
 
-	_, err := strconv.ParseInt(accountId, 10, 64)
+	_, err := strconv.ParseInt(accountID, 10, 64)
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot convert accountId id")
+		return nil, errors.Wrap(err, "Cannot convert accountID id")
 	}
 
 	var localPayments []model.Payment
 	err = p.Db.WithContext(ctx).
 		Model(&model.Payment{}).
-		Where(fmt.Sprintf("to_account_id='%v' or from_account_id='%v'", accountId, accountId)).
+		Where(fmt.Sprintf("to_account_id='%v' or from_account_id='%v'", accountID, accountID)).
 		Select(&localPayments)
 
 	// if account has not any payment return empty

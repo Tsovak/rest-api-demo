@@ -113,7 +113,7 @@ func TestGetPaymentsByAccountIdOk(t *testing.T) {
 		Return(payments, nil)
 
 	manager := NewPaymentManager(mockPaymentRepository)
-	receivedPayments, err := manager.GetPaymentsByAccountId(ctx, payment.FromAccountID)
+	receivedPayments, err := manager.GetPaymentsByAccountID(ctx, payment.FromAccountID)
 
 	require.NoError(t, err)
 	require.NotNil(t, receivedPayments)
@@ -136,7 +136,7 @@ func TestGetPaymentsByAccountIdFail(t *testing.T) {
 		Return(nil, errors.New("cannot find the payment"))
 
 	manager := NewPaymentManager(mockPaymentRepository)
-	receivedPayments, err := manager.GetPaymentsByAccountId(ctx, payment.FromAccountID)
+	receivedPayments, err := manager.GetPaymentsByAccountID(ctx, payment.FromAccountID)
 
 	require.Error(t, err)
 	require.Nil(t, receivedPayments)

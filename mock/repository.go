@@ -64,33 +64,33 @@ func (mr *MockAccountRepositoryMockRecorder) Save(ctx, account interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockAccountRepository)(nil).Save), ctx, account)
 }
 
-// FindById mocks base method
-func (m *MockAccountRepository) FindById(ctx context.Context, id string) (model.Account, error) {
+// FindByID mocks base method
+func (m *MockAccountRepository) FindByID(ctx context.Context, id string) (model.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindById", ctx, id)
+	ret := m.ctrl.Call(m, "FindByID", ctx, id)
 	ret0, _ := ret[0].(model.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindById indicates an expected call of FindById
+// FindByID indicates an expected call of FindByID
 func (mr *MockAccountRepositoryMockRecorder) FindById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockAccountRepository)(nil).FindById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockAccountRepository)(nil).FindByID), ctx, id)
 }
 
-// DeleteById mocks base method
-func (m *MockAccountRepository) DeleteById(ctx context.Context, id string) error {
+// DeleteByID mocks base method
+func (m *MockAccountRepository) DeleteByID(ctx context.Context, id string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteById", ctx, id)
+	ret := m.ctrl.Call(m, "DeleteByID", ctx, id)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
-// DeleteById indicates an expected call of DeleteById
+// DeleteByID indicates an expected call of DeleteByID
 func (mr *MockAccountRepositoryMockRecorder) DeleteById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteById", reflect.TypeOf((*MockAccountRepository)(nil).DeleteById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteByID", reflect.TypeOf((*MockAccountRepository)(nil).DeleteByID), ctx, id)
 }
 
 // Update mocks base method
@@ -164,34 +164,34 @@ func (mr *MockPaymentRepositoryMockRecorder) Save(ctx interface{}, payment ...in
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockPaymentRepository)(nil).Save), varargs...)
 }
 
-// FindById mocks base method
-func (m *MockPaymentRepository) FindById(ctx context.Context, id string) (model.Payment, error) {
+// FindByID mocks base method
+func (m *MockPaymentRepository) FindByID(ctx context.Context, id string) (model.Payment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindById", ctx, id)
+	ret := m.ctrl.Call(m, "FindByID", ctx, id)
 	ret0, _ := ret[0].(model.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindById indicates an expected call of FindById
+// FindByID indicates an expected call of FindByID
 func (mr *MockPaymentRepositoryMockRecorder) FindById(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindById", reflect.TypeOf((*MockPaymentRepository)(nil).FindById), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockPaymentRepository)(nil).FindByID), ctx, id)
 }
 
-// GetPaymentsByAccountId mocks base method
-func (m *MockPaymentRepository) GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error) {
+// GetPaymentsByAccountID mocks base method
+func (m *MockPaymentRepository) GetPaymentsByAccountID(ctx context.Context, accountId string) ([]model.Payment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPaymentsByAccountId", ctx, accountId)
+	ret := m.ctrl.Call(m, "GetPaymentsByAccountID", ctx, accountId)
 	ret0, _ := ret[0].([]model.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetPaymentsByAccountId indicates an expected call of GetPaymentsByAccountId
+// GetPaymentsByAccountID indicates an expected call of GetPaymentsByAccountID
 func (mr *MockPaymentRepositoryMockRecorder) GetPaymentsByAccountId(ctx, accountId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPaymentsByAccountId", reflect.TypeOf((*MockPaymentRepository)(nil).GetPaymentsByAccountId), ctx, accountId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPaymentsByAccountID", reflect.TypeOf((*MockPaymentRepository)(nil).GetPaymentsByAccountID), ctx, accountId)
 }
 
 // GetSaveTransaction mocks base method

@@ -41,7 +41,7 @@ func (p *paymentRepoSuiteTest) Test_paymentRepository_FindById() {
 	err := p.paymentRepository.Save(context.Background(), payment)
 	require.NoError(p.T(), err, "Cannot save payment")
 
-	dbPayment, err := p.paymentRepository.FindById(context.Background(), strconv.FormatInt(payment.ID, 10))
+	dbPayment, err := p.paymentRepository.FindByID(context.Background(), strconv.FormatInt(payment.ID, 10))
 	require.NoError(p.T(), err, "Cannot find user")
 	require.Equal(p.T(), payment, &dbPayment)
 }

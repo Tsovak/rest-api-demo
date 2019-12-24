@@ -1,1 +1,1 @@
-package rest_api_demo
+package restapidemo

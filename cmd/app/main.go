@@ -35,7 +35,7 @@ func main() {
 
 	accountManager := service.NewAccountManager(accountRepository)
 	paymentManager := service.NewPaymentManager(paymentRepository)
-	apiServer := api.NewApiServer(accountManager, paymentManager, cfg.Logger)
+	apiServer := api.NewServer(accountManager, paymentManager, cfg.Logger)
 
 	e.Router().Add("GET", "/accounts", apiServer.GetAllAccounts)
 	e.Router().Add("POST", "/accounts", apiServer.CreateAccount)

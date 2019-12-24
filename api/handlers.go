@@ -14,16 +14,16 @@ import (
 // internalErrorMessage returns commons error message when something went wrong
 var internalErrorMessage = NewErrorMessage("internal server error")
 
-// ApiServer struct saves needed managers
-type ApiServer struct {
+// Server struct saves needed managers
+type Server struct {
 	accountManager service.AccountManager
 	paymentManager service.PaymentManager
 	logger         *logrus.Logger
 }
 
-// NewApiServer returns an ApiServer structure
-func NewApiServer(accountManager service.AccountManager, paymentManager service.PaymentManager, logger *logrus.Logger) *ApiServer {
-	return &ApiServer{
+// NewServer returns an Server structure
+func NewServer(accountManager service.AccountManager, paymentManager service.PaymentManager, logger *logrus.Logger) *Server {
+	return &Server{
 		accountManager: accountManager,
 		paymentManager: paymentManager,
 		logger:         logger,
@@ -31,7 +31,7 @@ func NewApiServer(accountManager service.AccountManager, paymentManager service.
 }
 
 // CreateAccount represents an account creation handler
-func (s *ApiServer) CreateAccount(ctx echo.Context) error {
+func (s *Server) CreateAccount(ctx echo.Context) error {
 	context := ctx.Request().Context()
 	var accountRequest = new(model.AccountRequest)
 
@@ -65,7 +65,7 @@ func (s *ApiServer) CreateAccount(ctx echo.Context) error {
 }
 
 // GetAllAccounts returns all created accounts
-func (s *ApiServer) GetAllAccounts(ctx echo.Context) error {
+func (s *Server) GetAllAccounts(ctx echo.Context) error {
 	context := ctx.Request().Context()
 	accounts, err := s.accountManager.GetAllAccounts(context)
 	if err != nil {
@@ -77,10 +77,10 @@ func (s *ApiServer) GetAllAccounts(ctx echo.Context) error {
 }
 
 // GetAccountPayments returns an account payments
-func (s *ApiServer) GetAccountPayments(ctx echo.Context) error {
+func (s *Server) GetAccountPayments(ctx echo.Context) error {
 	context := ctx.Request().Context()
-	accountId := ctx.Param("id")
-	payments, err := s.paymentManager.GetPaymentsByAccountId(context, accountId)
+	accountID := ctx.Param("id")
+	payments, err := s.paymentManager.GetPaymentsByAccountID(context, accountID)
 	if err != nil {
 		s.logger.WithContext(context).Error(err)
 		return ctx.JSON(http.StatusInternalServerError, NewErrorMessage("cannot get an account payments"))
@@ -89,21 +89,15 @@ func (s *ApiServer) GetAccountPayments(ctx echo.Context) error {
 	// preparing the response
 	var localPaymentResponse = make([]model.PaymentResponse, len(payments))
 	for i, p := range payments {
-		pr := model.PaymentResponse{
-			ID:            p.ID,
-			Amount:        p.Amount,
-			ToAccountID:   p.ToAccountID,
-			FromAccountID: p.FromAccountID,
-			Direction:     p.Direction,
-		}
-		localPaymentResponse[i] = pr
+		paymentResponse := model.PaymentResponse(p)
+		localPaymentResponse[i] = paymentResponse
 	}
 
 	return ctx.JSON(http.StatusOK, localPaymentResponse)
 }
 
 // CreatePayment represents an account payment creation
-func (s *ApiServer) CreatePayment(ctx echo.Context) error {
+func (s *Server) CreatePayment(ctx echo.Context) error {
 	context := ctx.Request().Context()
 
 	// here we will decode request
@@ -122,7 +116,7 @@ func (s *ApiServer) CreatePayment(ctx echo.Context) error {
 		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("cannot decode"))
 	}
 
-	fromAccount, err := s.accountManager.FindById(context, localPayment.FromAccountID)
+	fromAccount, err := s.accountManager.FindByID(context, localPayment.FromAccountID)
 	if err != nil {
 		s.logger.WithContext(context).Error(err)
 		return ctx.JSON(http.StatusInternalServerError, internalErrorMessage)
@@ -140,7 +134,7 @@ func (s *ApiServer) CreatePayment(ctx echo.Context) error {
 	}
 
 	// we cannot credit an account which does not exist
-	toAccount, err := s.accountManager.FindById(context, localPayment.ToAccountID)
+	toAccount, err := s.accountManager.FindByID(context, localPayment.ToAccountID)
 	if err != nil {
 		s.logger.WithContext(context).Error(err)
 		return ctx.JSON(http.StatusInternalServerError, internalErrorMessage)

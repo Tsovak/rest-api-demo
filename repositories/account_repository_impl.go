@@ -13,9 +13,9 @@ type accountRepository struct {
 	Db *pg.DB
 }
 
-func NewAccountRepository(Db *pg.DB) AccountRepository {
+func NewAccountRepository(db *pg.DB) AccountRepository {
 	return &accountRepository{
-		Db: Db,
+		Db: db,
 	}
 }
 
@@ -51,7 +51,7 @@ func (a accountRepository) Save(ctx context.Context, account *model.Account) err
 	return nil
 }
 
-func (a accountRepository) FindById(ctx context.Context, id string) (model.Account, error) {
+func (a accountRepository) FindByID(ctx context.Context, id string) (model.Account, error) {
 	if len(id) == 0 {
 		return model.Account{}, errors.New("Account id is incorrect")
 	}
@@ -70,7 +70,7 @@ func (a accountRepository) FindById(ctx context.Context, id string) (model.Accou
 	return account, err
 }
 
-func (a accountRepository) DeleteById(ctx context.Context, id string) error {
+func (a accountRepository) DeleteByID(ctx context.Context, id string) error {
 	if len(id) == 0 {
 		return errors.New("Account id is incorrect")
 	}
