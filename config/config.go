@@ -67,12 +67,3 @@ func getLogger(loglevel string) *logrus.Logger {
 	logrusLogger.SetLevel(level)
 	return logrusLogger
 }
-
-// Load config without error
-func LoadConfigSilence() Config {
-	config, err := LoadConfig()
-	if err != nil {
-		panic(err)
-	}
-	return config
-}
