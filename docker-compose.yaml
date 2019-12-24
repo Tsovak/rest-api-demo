@@ -28,9 +28,6 @@ services:
       - postgres
     ports:
       - 8080:8080
-    configs:
-      - source: my_config
-        target: /opt/app/config/app.yaml
     environment:
       API_DB_ADDRESS: 'postgres:5432'
     network_mode: "bridge"
@@ -47,8 +44,16 @@ services:
         ls -al
         ./migrate -dir /opt/app/scripts/migrations -init
         ./app
-#
-configs:
-  my_config:
-    file: ./config/app.yaml
-    external: true
+
+  swagger:
+    container_name: swagger
+    image: swaggerapi/swagger-ui
+    environment:
+      - SWAGGER_JSON=/sw/swagger.json
+    volumes:
+      - ./swagger/:/sw/
+    ports:
+      - 8888:8080
+    links:
+      - app
+

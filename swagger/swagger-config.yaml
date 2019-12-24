@@ -1,0 +1,212 @@
+swagger: '2.0'
+info:
+  description: "This is a sample API server"
+  version: "1.0.0"
+  title: "Swagger Golang REST API demo"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/"
+tags:
+  - name: "accounts"
+  - name: "payments"
+schemes:
+  - "http"
+paths:
+  /accounts:
+    post:
+      tags:
+        - "accounts"
+      summary: "Add a new account"
+      operationId: "newaccount"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          description: Account object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/AccountRequest'
+      responses:
+        400:
+          description: "invalid input: cannot decode"
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/AccountResponce'
+
+    get:
+      tags:
+        - "accounts"
+      summary: "Get all accounts"
+      operationId: "allaccount"
+      produces:
+        - "application/json"
+      responses:
+        500:
+          description: "internal server error"
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccountResponce'
+
+  /accounts/{accountId}/payments:
+    get:
+      tags:
+        - "accounts"
+        - "payments"
+      summary: "Get account payments"
+      operationId: "accountpayment"
+      produces:
+        - "application/json"
+      parameters:
+        - name: accountId
+          in: path
+          description: ID of account
+          required: true
+          type: integer
+          format: int64
+      responses:
+        500:
+          description: "internal server error"
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/AccountPaymentResponse'
+
+  /payments:
+    post:
+      tags:
+        - "payments"
+      summary: "Do a new payment"
+      operationId: "payments"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: body
+          name: body
+          description: Payment object that needs to be added to the store
+          required: true
+          schema:
+            $ref: '#/definitions/DoPaymentRquest'
+      responses:
+        400:
+          description: "invalid input: cannot decode"
+        200:
+          description: "OK"
+          schema:
+            $ref: '#/definitions/AccountResponce'
+
+definitions:
+  AccountRequest:
+    type: object
+    required:
+      - balance
+      - currency
+      - name
+    properties:
+      name:
+        type: string
+        description: the new account name
+        example: Alice
+      currency:
+        type: string
+        description: the account currency
+        example: RUB
+      balance:
+        type: integer
+        format: int64
+        description: the account initial balance
+        example: 100500
+
+  AccountResponce:
+    type: object
+    required:
+      - id
+      - balance
+      - currency
+      - name
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: the account ID
+        example: 5
+      name:
+        type: string
+        example: Alice
+      currency:
+        type: string
+        example: RUB
+      balance:
+        type: integer
+        format: int64
+        example: 100500
+
+
+
+  DoPaymentRquest:
+    type: object
+    required:
+      - amount
+      - to_id
+      - from_id
+    properties:
+      amount:
+        type: integer
+        format: int64
+        description: how much money need to transfer
+        example: 100
+      to_id:
+        type: string
+        description: transfer to account ID
+        example: 5
+      from_id:
+        type: string
+        description: transfer from account ID
+        example: 4
+
+
+  AccountPaymentResponse:
+    type: object
+    required:
+      - id
+      - amount
+      - to_account
+      - from_account
+      - direction
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: the payment ID
+        example: 5
+      amount:
+        type: integer
+        format: int64
+        description: how much money transferred
+        example: 100
+      to_account:
+        type: string
+        description: transferred to account ID
+        example: 5
+      from_account:
+        type: string
+        description: transferred from account ID
+        example: 4
+      direction:
+        type: string
+        description: transfer direction
+        enum:
+          - outgoing
+          - incoming
