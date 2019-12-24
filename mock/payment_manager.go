@@ -69,19 +69,19 @@ func (mr *MockPaymentManagerMockRecorder) CreatePayments(ctx interface{}, paymen
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreatePayments", reflect.TypeOf((*MockPaymentManager)(nil).CreatePayments), varargs...)
 }
 
-// GetPaymentsByAccountId mocks base method
-func (m *MockPaymentManager) GetPaymentsByAccountId(ctx context.Context, id string) ([]model.Payment, error) {
+// GetPaymentsByAccountID mocks base method
+func (m *MockPaymentManager) GetPaymentsByAccountID(ctx context.Context, id string) ([]model.Payment, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetPaymentsByAccountId", ctx, id)
+	ret := m.ctrl.Call(m, "GetPaymentsByAccountID", ctx, id)
 	ret0, _ := ret[0].([]model.Payment)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetPaymentsByAccountId indicates an expected call of GetPaymentsByAccountId
+// GetPaymentsByAccountID indicates an expected call of GetPaymentsByAccountID
 func (mr *MockPaymentManagerMockRecorder) GetPaymentsByAccountId(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPaymentsByAccountId", reflect.TypeOf((*MockPaymentManager)(nil).GetPaymentsByAccountId), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetPaymentsByAccountID", reflect.TypeOf((*MockPaymentManager)(nil).GetPaymentsByAccountID), ctx, id)
 }
 
 // GetSaveTransaction mocks base method

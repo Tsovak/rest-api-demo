@@ -53,7 +53,7 @@ func (a *accountRepoSuiteTest) TestAccountRepository_FindById() {
 	user := testutils.GetTestUser()
 	err := a.accountRepository.Save(context.Background(), user)
 	require.NoError(a.T(), err, "Cannot save user")
-	dbUser, err := a.accountRepository.FindById(context.Background(), strconv.FormatInt(user.ID, 10))
+	dbUser, err := a.accountRepository.FindByID(context.Background(), strconv.FormatInt(user.ID, 10))
 	require.NoError(a.T(), err, "Cannot find user")
 	require.Equal(a.T(), user, &dbUser)
 }
@@ -64,10 +64,10 @@ func (a *accountRepoSuiteTest) TestAccountRepository_DeleteById() {
 	err := a.accountRepository.Save(context.Background(), user)
 	require.NoError(a.T(), err, "Cannot save user")
 
-	err = a.accountRepository.DeleteById(context.Background(), userIdString)
+	err = a.accountRepository.DeleteByID(context.Background(), userIdString)
 	require.NoError(a.T(), err, "Cannot delete user")
 
-	dbUser, err := a.accountRepository.FindById(context.Background(), userIdString)
+	dbUser, err := a.accountRepository.FindByID(context.Background(), userIdString)
 	require.NoError(a.T(), err, "Cannot find user")
 	require.Empty(a.T(), dbUser, "User not deleted")
 }
@@ -84,7 +84,7 @@ func (a *accountRepoSuiteTest) TestAccountRepository_UpdateBalance() {
 	err = a.accountRepository.Update(context.Background(), user, nil)
 	require.NoError(a.T(), err, "Cannot update balance")
 
-	dbUser, err := a.accountRepository.FindById(context.Background(), userIdString)
+	dbUser, err := a.accountRepository.FindByID(context.Background(), userIdString)
 	require.NoError(a.T(), err, "Cannot find user")
 
 	require.Equal(a.T(), user.Balance, dbUser.Balance, "User balance is different")

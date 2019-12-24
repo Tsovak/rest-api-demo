@@ -13,9 +13,7 @@ import (
 // GetTestUser returns the new random test User
 func GetTestUser() *model.Account {
 	user := &model.Account{
-		ID: func() int64 {
-			return rand.Int63()
-		}(),
+		ID:       rand.Int63(),
 		Name:     "Test name",
 		Currency: "RUB",
 		Balance:  100,
@@ -27,9 +25,7 @@ func GetTestUser() *model.Account {
 // GetTestPayment returns a new random payment
 func GetTestPayment() *model.Payment {
 	return &model.Payment{
-		ID: func() int64 {
-			return rand.Int63()
-		}(),
+		ID:            rand.Int63(),
 		Amount:        100,
 		ToAccountID:   "123456",
 		FromAccountID: "654321",
@@ -83,9 +79,9 @@ func SetupTestDB(pgOptions *pg.Options, migrationsDir string) (*DBSetup, error) 
 	})
 	if err != nil {
 		returnedError := errors.Wrap(err, "Could not start postgres")
-		poolCleanerError := poolCleaner()
-		poolCleanerError = errors.Wrap(returnedError, "Clean poll error")
-		return nil, errors.Wrap(poolCleanerError, "Could not clean db")
+		_ = poolCleaner()
+		errwrap := errors.Wrap(returnedError, "Clean poll error")
+		return nil, errors.Wrap(errwrap, "Could not clean db")
 	}
 
 	dbCleaner := func() error {

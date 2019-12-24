@@ -117,7 +117,7 @@ func TestFindByIdAccountsOk(t *testing.T) {
 		Return(user, nil)
 
 	manager := NewAccountManager(mockAccountRepository)
-	returnedAccount, err := manager.FindById(ctx, string(user.ID))
+	returnedAccount, err := manager.FindByID(ctx, string(user.ID))
 	require.NoError(t, err)
 	require.Equal(t, user, returnedAccount)
 }
@@ -136,7 +136,7 @@ func TestFindByIdAccountsFail(t *testing.T) {
 		Return(model.Account{}, errors.New("cannot find account"))
 
 	manager := NewAccountManager(mockAccountRepository)
-	returnedAccount, err := manager.FindById(ctx, string(user.ID))
+	returnedAccount, err := manager.FindByID(ctx, string(user.ID))
 	require.Error(t, err)
 	require.Equal(t, model.Account{}, returnedAccount)
 }
@@ -155,7 +155,7 @@ func TestDeleteByIdAccountsFail(t *testing.T) {
 		Return(errors.New("cannot delete account"))
 
 	manager := NewAccountManager(mockAccountRepository)
-	err := manager.DeleteById(ctx, string(user.ID))
+	err := manager.DeleteByID(ctx, string(user.ID))
 	require.Error(t, err)
 }
 
@@ -173,7 +173,7 @@ func TestDeleteByIdAccountsOk(t *testing.T) {
 		Return(nil)
 
 	manager := NewAccountManager(mockAccountRepository)
-	err := manager.DeleteById(ctx, string(user.ID))
+	err := manager.DeleteByID(ctx, string(user.ID))
 	require.NoError(t, err)
 }
 

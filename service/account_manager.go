@@ -18,11 +18,11 @@ type AccountManager interface {
 	// Save new account
 	Save(ctx context.Context, account *model.Account) error
 
-	// Find account by id
-	FindById(ctx context.Context, id string) (model.Account, error)
+	// Find account by ID
+	FindByID(ctx context.Context, id string) (model.Account, error)
 
-	// Delete account by id
-	DeleteById(ctx context.Context, id string) error
+	// Delete account by ID
+	DeleteByID(ctx context.Context, id string) error
 
 	// Update account
 	Update(ctx context.Context, account *model.Account, fn func(*pg.Tx) error) error
@@ -55,16 +55,16 @@ func (m *accountManager) Save(ctx context.Context, account *model.Account) error
 	return nil
 }
 
-func (m *accountManager) FindById(ctx context.Context, id string) (model.Account, error) {
-	accounts, err := m.accountRepository.FindById(ctx, id)
+func (m *accountManager) FindByID(ctx context.Context, id string) (model.Account, error) {
+	accounts, err := m.accountRepository.FindByID(ctx, id)
 	if err != nil {
 		return model.Account{}, errors.Wrap(err, "Failed to find account")
 	}
 	return accounts, nil
 }
 
-func (m *accountManager) DeleteById(ctx context.Context, id string) error {
-	err := m.accountRepository.DeleteById(ctx, id)
+func (m *accountManager) DeleteByID(ctx context.Context, id string) error {
+	err := m.accountRepository.DeleteByID(ctx, id)
 	if err != nil {
 		return errors.Wrap(err, "Failed to delete account")
 	}

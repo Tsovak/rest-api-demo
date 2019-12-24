@@ -18,8 +18,8 @@ type PaymentManager interface {
 	// CreatePayments save the payments
 	CreatePayments(ctx context.Context, payments ...*model.Payment) error
 
-	// GetPaymentsByAccountId return all payments fot specified account
-	GetPaymentsByAccountId(ctx context.Context, id string) ([]model.Payment, error)
+	// GetPaymentsByAccountID return all payments fot specified account
+	GetPaymentsByAccountID(ctx context.Context, id string) ([]model.Payment, error)
 
 	// GetSaveTransaction return transaction function for save in DB without commit
 	GetSaveTransaction(ctx context.Context, payments ...*model.Payment) func(*pg.Tx) error
@@ -52,12 +52,12 @@ func (p *paymentManager) CreatePayments(ctx context.Context, payments ...*model.
 	return nil
 }
 
-func (p *paymentManager) GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error) {
-	if len(accountId) == 0 {
+func (p *paymentManager) GetPaymentsByAccountID(ctx context.Context, accountID string) ([]model.Payment, error) {
+	if len(accountID) == 0 {
 		return nil, errors.New("Account id is incorrect")
 	}
 
-	payments, err := p.paymentRepository.GetPaymentsByAccountId(ctx, accountId)
+	payments, err := p.paymentRepository.GetPaymentsByAccountID(ctx, accountID)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to get payments for an account")
 	}

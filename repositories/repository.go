@@ -16,11 +16,11 @@ type AccountRepository interface {
 	// Save new account in storage
 	Save(ctx context.Context, account *model.Account) error
 
-	// Find Account by id
-	FindById(ctx context.Context, id string) (model.Account, error)
+	// Find Account by ID
+	FindByID(ctx context.Context, id string) (model.Account, error)
 
-	// Delete Account by id
-	DeleteById(ctx context.Context, id string) error
+	// Delete Account by ID
+	DeleteByID(ctx context.Context, id string) error
 
 	// Update account
 	Update(ctx context.Context, account *model.Account, fn func(tx *pg.Tx) error) error
@@ -34,11 +34,11 @@ type PaymentRepository interface {
 	// Save new payment
 	Save(ctx context.Context, payment ...*model.Payment) error
 
-	// Find Payment by id
-	FindById(ctx context.Context, id string) (model.Payment, error)
+	// Find Payment by ID
+	FindByID(ctx context.Context, id string) (model.Payment, error)
 
-	// Get Payments by account id
-	GetPaymentsByAccountId(ctx context.Context, accountId string) ([]model.Payment, error)
+	// Get Payments by account ID
+	GetPaymentsByAccountID(ctx context.Context, accountID string) ([]model.Payment, error)
 
 	// Get function for save payments without commit in DB
 	GetSaveTransaction(ctx context.Context, payments ...*model.Payment) func(tx *pg.Tx) error
