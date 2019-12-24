@@ -16,8 +16,11 @@ notifications:
   email: false
 
 before_script:
-  - go install github.com/golangci/golangci-lint/cmd/golangci-lint
+  - make install_deps
 
 script:
   - make test test-with-coverage
   - make build
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
