@@ -4,6 +4,10 @@
 
 License: GPL v3. [GPL License](http://www.gnu.org/licenses)
 
+[![Build Status](https://travis-ci.com/Tsovak/rest-api-demo.svg?branch=master)](https://travis-ci.com/Tsovak/rest-api-demo)
+[![Coverage](https://codecov.io/gh/Tsovak/rest-api-demo/branch/master/graph/badge.svg)](https://codecov.io/gh/Tsovak/rest-api-demo)
+[![GolangCI](https://golangci.com/r/github.com/Tsovak/rest-api-demo)](https://golangci.com/r/github.com/Tsovak/rest-api-demo)
+
 ## Introduction
 
 This is the demo project which provides simple endpoints. Project store based on Postgres. 
