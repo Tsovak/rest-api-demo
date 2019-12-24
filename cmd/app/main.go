@@ -29,6 +29,10 @@ func main() {
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Output: cfg.Logger.Out,
 	}))
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	accountRepository := repositories.NewAccountRepository(connection)
 	paymentRepository := repositories.NewPaymentRepository(connection)
