@@ -26,7 +26,7 @@ Integration tests need a running docker service or docker.sock.
    
 The project has a Dockerfile. It's simple to build by Docker. <br>
 Run the command in the project base dir 
-`docker build -t rest-api-demo` or `make install_deps build` 
+`docker build -t rest-api-demo .` or `make install_deps build` 
 
 You able to run all necessary services via docker-compose. 
 `docker-compose up` <br>
