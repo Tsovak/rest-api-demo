@@ -45,7 +45,7 @@ func (s *Server) CreateAccount(ctx echo.Context) error {
 	err := decoder.Decode(&accountRequest)
 	if err != nil {
 		s.logger.WithContext(context).Error(err)
-		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("cannot decode"))
+		return ctx.JSON(http.StatusBadRequest, NewErrorMessage("invalid input: cannot decode"))
 	}
 
 	// create an account model with zero ID. Id will be stored by DB
@@ -61,7 +61,8 @@ func (s *Server) CreateAccount(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, internalErrorMessage)
 	}
 
-	return ctx.JSON(http.StatusOK, account)
+	accountResponse := model.AccountResponse(account)
+	return ctx.JSON(http.StatusOK, accountResponse)
 }
 
 // GetAllAccounts returns all created accounts
@@ -175,5 +176,12 @@ func (s *Server) CreatePayment(ctx echo.Context) error {
 		return ctx.JSON(http.StatusInternalServerError, internalErrorMessage)
 	}
 
-	return ctx.JSON(http.StatusOK, payments)
+	// preparing the response
+	var localPaymentResponse = make([]model.PaymentResponse, len(payments))
+	for i, p := range payments {
+		paymentResponse := model.PaymentResponse(*p)
+		localPaymentResponse[i] = paymentResponse
+	}
+
+	return ctx.JSON(http.StatusOK, localPaymentResponse)
 }
