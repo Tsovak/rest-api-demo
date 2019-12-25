@@ -52,8 +52,10 @@ Read go docs on http://localhost:6060/pkg/github.com/tsovak/rest-api-demo/.
 
 ### API Documentation
 
-API docs are available by swagger. 
-Just deploy using docker-compose and open `http://localhost:8888/#/`. Or open https://app.swaggerhub.com/apis-docs/Tsovak/go-rest-api/1.0.0 
+API docs are available by swagger and markdown ([docks/api.md](docs/api.md)). 
+Just deploy using docker-compose and open `http://localhost:8888/#/`. 
+Or open https://app.swaggerhub.com/apis-docs/Tsovak/go-rest-api/1.0.0. 
+
 
 ## Examples
 
